@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,37 +11,33 @@ import org.springframework.web.client.RestTemplate;
 
 import com.albummanager.commons.Constants;
 import com.albummanager.dao.UserDAO;
-import com.albummanager.model.Permissions;
+import com.albummanager.exception.RestTemplateErrorHandler;
 import com.albummanager.model.User;
 import com.albummanager.service.IUserService;
 
 @Service
 public class UserServiceImpl implements IUserService {
 
-	@Autowired
-	private RestTemplate restTemplate;
-	
 	@Autowired(required = true)
 	private UserDAO userDao;
 	
 	@Override
 	public List<User> getAllUsers() {
+		RestTemplate restTemplate = new RestTemplate();
+		restTemplate.setErrorHandler(new RestTemplateErrorHandler());
+		
 		List<User> users = Arrays.asList(restTemplate.getForObject(Constants.URL_SERVICE + "users", User[].class));
 		return users;
 	}
 
 	@Override
-	public Optional<User> getUser(int id) throws Exception {
+	public User getUser(int id) throws Exception {
+		RestTemplate restTemplate = new RestTemplate();
+		restTemplate.setErrorHandler(new RestTemplateErrorHandler());
 		Map<String, String> pathVars = new HashMap<String, String>();
 		pathVars.put("id", Integer.toString(id));
-		Optional<User> user = Optional.of(restTemplate.getForObject(Constants.URL_SERVICE + "users/{id}", User.class, pathVars));
-		return user;
-	}
-
-	@Override
-	public Optional<User> getUserByUserName(String name) {
-		List<User> users = Arrays.asList(restTemplate.getForObject(Constants.URL_SERVICE + "users", User[].class));
-		return users.stream().filter(u -> u.getUsername().equals(name)).findFirst();
+		User user = restTemplate.getForObject(Constants.URL_SERVICE + "users/{id}", User.class, pathVars);
+		return user.getId() != null ? user : null;
 	}
 
 	@Override

@@ -8,6 +8,6 @@ public interface ICommentService {
 	
 	public List<Comment> getAllcomments();
 	public Comment getCommentById(int id);
-	public List<Comment> getCommentsByUserAndName();
+	public List<Comment> getCommentsByUserOrName(Integer userId, String name);
 	
 }

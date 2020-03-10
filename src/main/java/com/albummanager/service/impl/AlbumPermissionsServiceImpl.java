@@ -45,7 +45,7 @@ public class AlbumPermissionsServiceImpl implements IAlbumPermissionsService {
 		User user;
 		if (!permission.equals(Permissions.N)) {
 			if (!isUserPresent(userId)) {
-				user = userService.getUser(userId).get();
+				user = userService.getUser(userId);
 				if (user != null) {
 					userDao.save(user);
 				} else {
@@ -59,9 +59,7 @@ public class AlbumPermissionsServiceImpl implements IAlbumPermissionsService {
 			if (!isAlbumPresent(albumId)) {
 				album = albumService.getAlbumById(albumId);
 				if (album != null) {
-					System.out.println(album.toString());
 					album = albumDao.save(album);
-					System.out.println(album.toString());
 				} else {
 					throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
 				}

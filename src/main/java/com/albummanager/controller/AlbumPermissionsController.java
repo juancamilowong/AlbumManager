@@ -23,42 +23,37 @@ import com.albummanager.service.IAlbumPermissionsService;
 @CrossOrigin(origins = "*", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.PATCH })
 @RequestMapping(value = { "/api/permissions" })
 public class AlbumPermissionsController {
-	
+
 	@Autowired
 	IAlbumPermissionsService albumpermissionsService;
-	
+
 	@PostMapping("/add")
 	@ResponseStatus(HttpStatus.CREATED)
 	public void addPermissions(@RequestBody RequestPermissions request) {
 		try {
-			albumpermissionsService.saveAlbumPermissions(request.getUserId(), 
-					request.getAlbumId(), request.getPermissionValue());
+			albumpermissionsService.saveAlbumPermissions(request.getUserId(), request.getAlbumId(),
+					request.getPermissionValue());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			//e.printStackTrace();
+			// e.printStackTrace();
 		}
-		
+
 	}
-	
+
 	@PutMapping("/update")
 	@ResponseStatus(HttpStatus.CREATED)
 	public void updatePermissions(@RequestBody RequestPermissions request) {
-		try {
-			albumpermissionsService.updateAlbumPermissions(request.getUserId(), 
-					request.getAlbumId(), request.getPermissionValue());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
-		}
-		
+
+		albumpermissionsService.updateAlbumPermissions(request.getUserId(), request.getAlbumId(),
+				request.getPermissionValue());
+
 	}
-	
+
 	@GetMapping("/user/album/{album_id}/permission/{permission_value}")
-	public List<User> getAllUsers(@PathVariable("album_id") int albumId, 
+	public List<User> getAllUsers(@PathVariable("album_id") int albumId,
 			@PathVariable("permission_value") int permission) {
 		List<User> list = albumpermissionsService.getUsersByAlbumFilteredByPermission(albumId, permission);
 		return list;
 	}
-	
-	
+
 }

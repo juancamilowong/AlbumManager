@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,13 +25,13 @@ public class AlbumController {
 	@Autowired
 	private IAlbumService albumService;
 
-	@GetMapping(headers = "Accept=application/json")
+	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<Album> getAllAlbums() {
 		List<Album> list = albumService.getAllAlbums();
 		return list;
 	}
 	
-	@GetMapping(value = "/{id}", headers = "Accept=application/json")
+	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> getAlbum(@PathVariable int id) {
 		
 		Album album = null;
